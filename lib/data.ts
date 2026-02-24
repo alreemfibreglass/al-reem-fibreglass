@@ -81,7 +81,7 @@ export const projects = [
   { id: 15, name: "40M × 40M Camel Shed – Sh. Sultan",       location: "Sweihan Farm",     image: "/images/projects/camel-shed.jpg" },
   { id: 16, name: "50M × 25M Store – Sh. Essa Farm",         location: "Al Ain",           image: "/images/projects/essa-farm-store.jpg" },
   { id: 17, name: "Sh. Saif Bin Mohd. Al Nahayan Palace",    location: "Near Al Ain Airport", image: "/images/projects/saif-palace.jpg" },
-  { id: 18, name: "Al Ain Municipality Parking",             location: "Al Ain",           image: "/images/projects/municipality-parking.jpg" },
+  { id: 18, name: "Al Ain Municipality Parking",             location: "Al Ain",           image: "/images/projects/al-ain-municipality-parking.jpg" },
   { id: 19, name: "Al Ain National Museum",                   location: "Al Ain",           image: "/images/projects/national-museum.jpg" },
   { id: 20, name: "Bawadi Mall (Central Market)",             location: "Al Ain, 2009",     image: "/images/projects/bawadi-mall.jpg" },
   { id: 21, name: "Al Ain Diwan – Model Erection",            location: "Al Ain, 2010",     image: "/images/projects/al-ain-diwan.jpg" },
