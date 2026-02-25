@@ -77,12 +77,12 @@ const featuredProjects = [
     tagColor: "bg-blue-50 text-blue-700 border-blue-200",
   },
   {
-    id: 20,
-    name: "Bawadi Mall (Central Market)",
-    location: "Al Ain, 2009",
-    image: "/images/projects/bawadi-mall.jpg",
-    desc: "Comprehensive shading and structural installations for one of Al Ain's largest commercial complexes — the Central Market at Bawadi Mall.",
-    tag: "Shopping Mall",
+    id: 10,
+    name: "Al Ain Municipality Parking",
+    location: "Al Ain",
+    image: "/images/projects/al-ain-municipality-parking.jpg",
+    desc: "Comprehensive shading and structural installations for one of Al Ain Muncipality parking",
+    tag: "Municipality Project",
     tagColor: "bg-pink-50 text-pink-700 border-pink-200",
   },
 ];

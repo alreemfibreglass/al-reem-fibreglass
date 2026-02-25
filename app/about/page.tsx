@@ -1,10 +1,9 @@
 // app/about/page.tsx
+"use client";
+
 import Link from "next/link";
-import {
-  companyInfo,
-  stats,
-  services,
-} from "@/lib/data";
+import { useState } from "react";
+import { companyInfo } from "@/lib/data";
 import {
   ArrowRight,
   MapPin,
@@ -19,17 +18,164 @@ import {
   Users,
   Award,
   Factory,
+  X,
+  ZoomIn,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
-export const metadata = {
-  title: "About Us | Al Reem Fibre Glass & Gen. Cont. Co. LLC",
-  description:
-    "Learn about Al Reem Fibre Glass — UAE's trusted shading and construction company since 1994. Based in Al Ain, serving government and private clients across the UAE.",
-};
+const certificates = [
+  {
+    id: 1,
+    title: "Quality Management System",
+    issuer: "ISO 9001:2015 Certified",
+    badge: "ISO 9001",
+    image: "/images/certificates/quality-management.webp",
+  },
+  {
+    id: 2,
+    title: "Occupational Health & Safety Management System",
+    issuer: "ISO 45001:2018 Certified",
+    badge: "ISO 45001",
+    image: "/images/certificates/health-and-safety.webp",
+  },
+  {
+    id: 3,
+    title: "Environmental Management System",
+    issuer: "ISO 14001:2015 Certified",
+    badge: "ISO 14001",
+    image: "/images/certificates/environmental-management.webp",
+  },
+  {
+    id: 4,
+    title: "Economic Licence",
+    issuer: "Department of Economic Development — Page 1",
+    badge: "Page 1 / 2",
+    image: "/images/certificates/economic-licence-1.webp",
+  },
+  {
+    id: 5,
+    title: "Economic Licence",
+    issuer: "Department of Economic Development — Page 2",
+    badge: "Page 2 / 2",
+    image: "/images/certificates/economic-licence-2.webp",
+  },
+];
 
+// ── Lightbox ──────────────────────────────────────────
+function Lightbox({
+  index,
+  onClose,
+  onPrev,
+  onNext,
+}: {
+  index: number;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  const cert = certificates[index];
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-3xl flex flex-col rounded-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Top bar */}
+        <div className="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-white/10">
+          <div>
+            <p className="text-white font-semibold text-sm">{cert.title}</p>
+            <p className="text-slate-400 text-xs">{cert.issuer}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-full bg-blue-600 text-white text-xs font-bold">
+              {cert.badge}
+            </span>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors ml-2"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Image */}
+        <div
+          className="bg-slate-950 flex items-center justify-center"
+          style={{ maxHeight: "75vh", overflow: "auto" }}
+        >
+          <img
+            src={cert.image}
+            alt={cert.title}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "75vh",
+              objectFit: "contain",
+              display: "block",
+            }}
+          />
+        </div>
+
+        {/* Bottom nav */}
+        <div className="flex items-center justify-between px-4 py-3 bg-slate-900 border-t border-white/10">
+          <button
+            onClick={onPrev}
+            disabled={index === 0}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft className="w-4 h-4" /> Previous
+          </button>
+
+          <div className="flex items-center gap-1.5">
+            {certificates.map((_, i) => (
+              <span
+                key={i}
+                className={`h-2 rounded-full transition-all duration-200 ${
+                  i === index ? "bg-blue-400 w-4" : "bg-white/30 w-2"
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={onNext}
+            disabled={index === certificates.length - 1}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            Next <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Page ──────────────────────────────────────────────
 export default function AboutPage() {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const openLightbox = (index: number) => setLightboxIndex(index);
+  const closeLightbox = () => setLightboxIndex(null);
+  const prevCert = () => setLightboxIndex((i) => (i !== null && i > 0 ? i - 1 : i));
+  const nextCert = () => setLightboxIndex((i) => (i !== null && i < certificates.length - 1 ? i + 1 : i));
+
   return (
     <div className="bg-white text-slate-900">
+
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          index={lightboxIndex}
+          onClose={closeLightbox}
+          onPrev={prevCert}
+          onNext={nextCert}
+        />
+      )}
 
       {/* ════════════════════════════════════════
           HERO
@@ -115,12 +261,12 @@ export default function AboutPage() {
           {/* Stats grid */}
           <div className="grid grid-cols-2 gap-4">
             {[
-              { icon: <Clock className="w-6 h-6" />, value: "1994", label: "Year Established", sub: "30+ years in operation" },
-              { icon: <Building className="w-6 h-6" />, value: "22+", label: "Landmark Projects", sub: "Palaces, airports & malls" },
-              { icon: <Users className="w-6 h-6" />, value: "21+", label: "Key Clients", sub: "Government & private sector" },
-              { icon: <Award className="w-6 h-6" />, value: "500+", label: "Projects Completed", sub: "Across all categories" },
-              { icon: <Factory className="w-6 h-6" />, value: "50+", label: "Equipment Units", sub: "CNC, cranes & welders" },
-              { icon: <MapPin className="w-6 h-6" />, value: "UAE", label: "Nationwide Coverage", sub: "Al Ain · Abu Dhabi · All Emirates" },
+              { icon: <Clock className="w-6 h-6" />,   value: "1994", label: "Year Established",    sub: "30+ years in operation" },
+              { icon: <Building className="w-6 h-6" />, value: "22+",  label: "Landmark Projects",   sub: "Palaces, airports & malls" },
+              { icon: <Users className="w-6 h-6" />,    value: "21+",  label: "Key Clients",         sub: "Government & private sector" },
+              { icon: <Award className="w-6 h-6" />,    value: "500+", label: "Projects Completed",  sub: "Across all categories" },
+              { icon: <Factory className="w-6 h-6" />,  value: "50+",  label: "Equipment Units",     sub: "CNC, cranes & welders" },
+              { icon: <MapPin className="w-6 h-6" />,   value: "UAE",  label: "Nationwide Coverage", sub: "Al Ain · Abu Dhabi · All Emirates" },
             ].map((card) => (
               <div
                 key={card.label}
@@ -182,10 +328,10 @@ export default function AboutPage() {
           {/* Core Values */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              { icon: <Shield className="w-5 h-5" />, label: "Durability", desc: "Products built for UAE's extreme climate" },
-              { icon: <Star className="w-5 h-5" />, label: "Quality", desc: "Highest material and finish standards" },
-              { icon: <Clock className="w-5 h-5" />, label: "Reliability", desc: "On-time delivery on every project" },
-              { icon: <Wrench className="w-5 h-5" />, label: "Innovation", desc: "Modern CNC precision manufacturing" },
+              { icon: <Shield className="w-5 h-5" />, label: "Durability",  desc: "Products built for UAE's extreme climate" },
+              { icon: <Star className="w-5 h-5" />,   label: "Quality",     desc: "Highest material and finish standards" },
+              { icon: <Clock className="w-5 h-5" />,  label: "Reliability", desc: "On-time delivery on every project" },
+              { icon: <Wrench className="w-5 h-5" />, label: "Innovation",  desc: "Modern CNC precision manufacturing" },
             ].map((val) => (
               <div key={val.label} className="flex flex-col items-center text-center p-5 rounded-xl bg-white border border-slate-100 shadow-sm hover:border-blue-200 hover:shadow-md transition-all duration-200">
                 <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 mb-3">
@@ -217,11 +363,11 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { title: "Government-Trusted Contractor", desc: "Completed projects for UAE ministries, royal palaces, Al Ain Municipality, and national institutions." },
-              { title: "In-House Manufacturing", desc: "Our Al Ain factory produces all components — ensuring quality control, faster lead times, and no third-party dependency." },
-              { title: "CNC Precision Equipment", desc: "VMC-540 machining centres, CNC profile cutters, and lathe machines ensure every part is built to exact tolerances." },
-              { title: "Full Project Lifecycle", desc: "From site survey and engineering drawings to fabrication, delivery, installation, and handover — all managed by us." },
-              { title: "Climate-Engineered Products", desc: "All shading products are designed and tested for UAE conditions — extreme heat, UV radiation, and sandstorms." },
+              { title: "Government-Trusted Contractor",   desc: "Completed projects for UAE ministries, royal palaces, Al Ain Municipality, and national institutions." },
+              { title: "In-House Manufacturing",          desc: "Our Al Ain factory produces all components — ensuring quality control, faster lead times, and no third-party dependency." },
+              { title: "CNC Precision Equipment",         desc: "VMC-540 machining centres, CNC profile cutters, and lathe machines ensure every part is built to exact tolerances." },
+              { title: "Full Project Lifecycle",          desc: "From site survey and engineering drawings to fabrication, delivery, installation, and handover — all managed by us." },
+              { title: "Climate-Engineered Products",     desc: "All shading products are designed and tested for UAE conditions — extreme heat, UV radiation, and sandstorms." },
               { title: "Licensed UAE General Contractor", desc: "Fully registered and licensed to operate across Al Ain, Abu Dhabi, and all Emirates." },
             ].map((item) => (
               <div key={item.title} className="flex gap-4 p-5 rounded-xl border border-slate-100 bg-slate-50 hover:border-blue-200 hover:bg-blue-50/30 transition-all duration-200 shadow-sm">
@@ -238,9 +384,149 @@ export default function AboutPage() {
 
 
       {/* ════════════════════════════════════════
+          CERTIFICATES & LICENCES
+      ════════════════════════════════════════ */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50 border-t border-slate-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <span className="text-blue-600 text-xs font-bold tracking-widest uppercase">Official Documents</span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mt-3 mb-3">
+              Certificates & Licences
+            </h2>
+            <p className="text-slate-500 text-sm max-w-xl mx-auto leading-relaxed">
+              Al Reem Fibre Glass holds internationally recognized management system
+              certifications and is fully licensed under UAE regulatory authorities.
+            </p>
+          </div>
+
+          {/* ISO Certs — 3 columns */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+            {certificates.slice(0, 3).map((cert, i) => (
+              <button
+                key={cert.id}
+                onClick={() => openLightbox(i)}
+                className="group rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-xl hover:shadow-blue-50 transition-all duration-300 hover:-translate-y-1 overflow-hidden shadow-sm text-left w-full cursor-pointer"
+              >
+                {/* Image */}
+                <div className="relative h-64 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden">
+                  {/* Placeholder behind */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 z-0">
+                    <Award className="w-12 h-12 text-slate-300" />
+                    <p className="text-slate-400 text-xs text-center px-6 font-medium leading-relaxed">{cert.title}</p>
+                    <span className="px-3 py-1 rounded-full bg-slate-200 text-slate-500 text-xs font-bold">{cert.badge}</span>
+                  </div>
+                  {/* Real image */}
+                  <img
+                    src={cert.image}
+                    alt={cert.title}
+                    className="absolute inset-0 w-full h-full object-cover object-top z-10 transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Badge */}
+                  <div className="absolute top-3 right-3 z-20">
+                    <span className="px-2.5 py-1 rounded-full bg-blue-600 text-white text-xs font-bold shadow-md">
+                      {cert.badge}
+                    </span>
+                  </div>
+                  {/* Zoom hint */}
+                  <div className="absolute inset-0 z-20 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+                      <ZoomIn className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+                {/* Info */}
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <h3 className="text-slate-900 font-bold text-sm leading-snug flex-1">{cert.title}</h3>
+                    <div className="w-6 h-6 rounded-full bg-green-50 border border-green-100 flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
+                    </div>
+                  </div>
+                  <p className="text-slate-500 text-xs leading-relaxed">{cert.issuer}</p>
+                  <p className="text-blue-500 text-xs font-semibold mt-2 group-hover:text-blue-600 transition-colors">
+                    Click to view full document →
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Economic Licence — 2 columns centered */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {certificates.slice(3).map((cert, i) => (
+              <button
+                key={cert.id}
+                onClick={() => openLightbox(i + 3)}
+                className="group rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-xl hover:shadow-blue-50 transition-all duration-300 hover:-translate-y-1 overflow-hidden shadow-sm text-left w-full cursor-pointer"
+              >
+                {/* Image */}
+                <div className="relative h-72 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden">
+                  {/* Placeholder behind */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 z-0">
+                    <Award className="w-12 h-12 text-slate-300" />
+                    <p className="text-slate-400 text-xs text-center px-6 font-medium leading-relaxed">{cert.title}</p>
+                    <span className="px-3 py-1 rounded-full bg-slate-200 text-slate-500 text-xs font-bold">{cert.badge}</span>
+                  </div>
+                  {/* Real image */}
+                  <img
+                    src={cert.image}
+                    alt={`${cert.title} — ${cert.badge}`}
+                    className="absolute inset-0 w-full h-full object-cover object-top z-10 transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Badge */}
+                  <div className="absolute top-3 right-3 z-20">
+                    <span className="px-2.5 py-1 rounded-full bg-slate-800 text-white text-xs font-bold shadow-md">
+                      {cert.badge}
+                    </span>
+                  </div>
+                  {/* Zoom hint */}
+                  <div className="absolute inset-0 z-20 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+                      <ZoomIn className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+                {/* Info */}
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <h3 className="text-slate-900 font-bold text-sm leading-snug flex-1">{cert.title}</h3>
+                    <div className="w-6 h-6 rounded-full bg-green-50 border border-green-100 flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
+                    </div>
+                  </div>
+                  <p className="text-slate-500 text-xs leading-relaxed">{cert.issuer}</p>
+                  <p className="text-blue-500 text-xs font-semibold mt-2 group-hover:text-blue-600 transition-colors">
+                    Click to view full document →
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Trust note */}
+          <div className="mt-10 p-6 rounded-2xl bg-blue-50 border border-blue-100 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shrink-0 shadow-md shadow-blue-200">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="text-slate-900 font-semibold text-sm mb-0.5">
+                Internationally Certified & UAE Licensed
+              </p>
+              <p className="text-slate-500 text-xs leading-relaxed">
+                Our ISO certifications — covering Quality, Health & Safety, and Environmental
+                Management — reflect our commitment to international best practices on every
+                project. All licences are current and renewed annually with the relevant UAE authorities.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════
           LOCATION
       ════════════════════════════════════════ */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 border-t border-slate-100">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-blue-600 text-xs font-bold tracking-widest uppercase">Find Us</span>
@@ -284,7 +570,7 @@ export default function AboutPage() {
               </Link>
             </div>
 
-            {/* Map embed */}
+            {/* Map */}
             <div className="lg:col-span-2 rounded-2xl overflow-hidden border border-slate-200 shadow-sm min-h-[320px]">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3640.7608410177327!2d55.838578!3d24.145035699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e8ab90066b318b7%3A0x9907b22b9d0b785!2sAl%20Reem%20Fibre%20Glass%20and%20Gen%20Cont%20Co%20LLc!5e0!3m2!1sen!2sae!4v1771876197977!5m2!1sen!2sae"
@@ -294,7 +580,7 @@ export default function AboutPage() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Al Reem Fibre Glass Location - Industrial Area Mazyad Al Ain UAE"
+                title="Al Reem Fibre Glass Location"
               />
             </div>
           </div>
