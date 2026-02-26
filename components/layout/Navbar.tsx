@@ -4,17 +4,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Triangle } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { companyInfo } from "@/lib/data";
 
 const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" },
-  { label: "Clients", href: "/clients" },
+  { label: "Home",      href: "/" },
+  { label: "About",     href: "/about" },
+  { label: "Services",  href: "/services" },
+  { label: "Projects",  href: "/projects" },
+  { label: "Clients",   href: "/clients" },
   { label: "Equipment", href: "/equipment" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact",   href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -45,12 +45,27 @@ export default function Navbar() {
 
           {/* ── LOGO ── */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-md bg-blue-600 flex items-center justify-center rotate-45 group-hover:rotate-0 transition-transform duration-300 shadow-md shadow-blue-200">
-              <Triangle
-                className="w-4 h-4 text-white -rotate-45 group-hover:rotate-0 transition-transform duration-300"
-                fill="white"
+            {/* Logo image — white version on hero, full colour when scrolled */}
+            <div className="relative h-10 w-auto">
+              {/* Colour logo (scrolled) */}
+              <img
+                src="/images/logo.png"
+                alt="Al Reem Fibre Glass Logo"
+                className={`h-10 w-auto object-contain transition-opacity duration-300 ${
+                  scrolled ? "opacity-100" : "opacity-0"
+                }`}
+              />
+              {/* White/light logo (on dark hero) */}
+              <img
+                src="/images/logo-white.png"
+                alt="Al Reem Fibre Glass Logo"
+                className={`h-10 w-auto object-contain absolute top-0 left-0 transition-opacity duration-300 ${
+                  scrolled ? "opacity-0" : "opacity-100"
+                }`}
               />
             </div>
+
+            {/* Company name text */}
             <div className="leading-tight">
               <p
                 className={`font-bold text-sm tracking-wide transition-colors duration-300 ${
@@ -86,7 +101,6 @@ export default function Navbar() {
                   }`}
                 >
                   {link.label}
-                  {/* Active underline dot */}
                   <span
                     className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-blue-500 rounded-full transition-all duration-300 ${
                       isActive ? "w-4" : "w-0 group-hover:w-4"
@@ -139,6 +153,20 @@ export default function Navbar() {
         }`}
       >
         <div className="bg-white/98 backdrop-blur-md border-t border-slate-100 px-4 py-4 space-y-1 shadow-lg">
+
+          {/* Mobile logo row */}
+          <div className="flex items-center gap-3 px-4 pb-3 mb-1 border-b border-slate-100">
+            <img
+              src="/images/logo.png"
+              alt="Al Reem Fibre Glass Logo"
+              className="h-8 w-auto object-contain"
+            />
+            <div className="leading-tight">
+              <p className="font-bold text-sm text-slate-900">Al Reem Fibre Glass</p>
+              <p className="text-[10px] text-blue-500 tracking-widest uppercase">Est. {companyInfo.founded}</p>
+            </div>
+          </div>
+
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (

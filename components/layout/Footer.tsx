@@ -1,16 +1,16 @@
 // components/layout/Footer.tsx
 import Link from "next/link";
-import { MapPin, Phone, Mail, Triangle } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import { companyInfo, services } from "@/lib/data";
 
 const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" },
-  { label: "Clients", href: "/clients" },
+  { label: "Home",      href: "/" },
+  { label: "About",     href: "/about" },
+  { label: "Services",  href: "/services" },
+  { label: "Projects",  href: "/projects" },
+  { label: "Clients",   href: "/clients" },
   { label: "Equipment", href: "/equipment" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact",   href: "/contact" },
 ];
 
 export default function Footer() {
@@ -21,7 +21,7 @@ export default function Footer() {
       <div className="border-b border-white/8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-slate-400 text-sm text-center sm:text-left">
-            📍 {companyInfo.poBox}, {companyInfo.location}
+             Office Address: {companyInfo.poBox}, {companyInfo.location}
           </p>
           <div className="flex items-center gap-4">
             <a
@@ -47,11 +47,12 @@ export default function Footer() {
 
           {/* ── COL 1: Brand ── */}
           <div className="lg:col-span-1">
-            {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group mb-5">
-              <div className="w-10 h-10 rounded-md bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-900/50">
-                <Triangle className="w-4 h-4 text-white" fill="white" />
-              </div>
+              <img
+                src="/images/logo-white.png"
+                alt="Al Reem Fibre Glass Logo"
+                className="h-10 w-auto object-contain"
+              />
               <div className="leading-tight">
                 <p className="text-white font-bold text-sm tracking-wide">Al Reem Fibre Glass</p>
                 <p className="text-blue-400 text-[10px] tracking-widest uppercase">Est. {companyInfo.founded}</p>
@@ -62,7 +63,6 @@ export default function Footer() {
               A trusted name in the UAE's construction and shading industry. Based in Al Ain, delivering quality since 1994.
             </p>
 
-            {/* Contact details */}
             <div className="space-y-3">
               <a
                 href={`mailto:${companyInfo.email}`}
@@ -156,7 +156,6 @@ export default function Footer() {
               </Link>
             </div>
 
-            {/* License note */}
             <div className="flex items-start gap-2 p-3 rounded-lg bg-white/3 border border-white/5">
               <span className="text-lg">🏛️</span>
               <div>
@@ -172,9 +171,16 @@ export default function Footer() {
       {/* ── BOTTOM BAR ── */}
       <div className="border-t border-white/8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-slate-500 text-xs text-center sm:text-left">
-            © {new Date().getFullYear()} {companyInfo.name}. All rights reserved.
-          </p>
+          <div className="flex items-center gap-3">
+            <img
+              src="/images/logo-white.png"
+              alt="Al Reem Fibre Glass"
+              className="h-6 w-auto object-contain opacity-50"
+            />
+            <p className="text-slate-500 text-xs">
+              © {new Date().getFullYear()} {companyInfo.name}. All rights reserved.
+            </p>
+          </div>
           <p className="text-slate-600 text-xs">
             Industrial Area, Mazyad · Al Ain, UAE
           </p>
